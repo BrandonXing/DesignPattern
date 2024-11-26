@@ -5,7 +5,7 @@
 template <typename T>
 class Singleton{
     public:
-        static inline T* getInstance();
+        static inline T& getInstance();
         void release();
 
         Singleton(Singleton const&) = delete;
@@ -14,14 +14,26 @@ class Singleton{
         Singleton& operator=(Singleton&&) = delete;
 
     protected:
-        Singleton() {};
-        ~Singleton() {};
-        static T* _instance;
+        Singleton();
+        ~Singleton();
+        static T& _instance;
 };
 
 
 template <typename T>
-inline T* Singleton<T>::getInstance(){
+Singleton<T>::Singleton(){
+    _instance = nullptr;
+}
+
+
+template <typename T>
+Singleton<T>::~Singleton(){
+    release();
+}
+
+
+template <typename T>
+inline T& Singleton<T>::getInstance(){
     if (!_instance) {
         _instance = new T;
     }
